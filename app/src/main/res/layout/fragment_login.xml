@@ -66,8 +66,24 @@
                     android:inputType="textPassword"/>
 
             </com.google.android.material.textfield.TextInputLayout>
+<!--            btn login-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Iniciar sesion"
+            app:icon="@drawable/login_24"
 
-
+            />
+<!--        btn register-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/registerButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register"
+                app:icon="@drawable/account_box_24"
+                android:backgroundTint="@color/design_default_color_secondary_variant"
+                />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
