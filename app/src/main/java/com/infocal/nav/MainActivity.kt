@@ -19,6 +19,8 @@ class MainActivity : AppCompatActivity() {
         binding= MainActivityBinding.inflate(layoutInflater)
         setSupportActionBar(binding.toolbar)
         setupNavHost()
+        // Listener para cambios en la navegación
+        setupDestinationChangedListener()
         setContentView(binding.root)
     }
 
@@ -28,8 +30,25 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         setupActionBarWithNavController(navController)
     }
+    // SRP: Listener para cambios en la navegación
+    private fun setupDestinationChangedListener() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            handleDestinationChange(destination.id)
+            invalidateOptionsMenu() // <-- Esto fuerza a llamar onPrepareOptionsMenu
+        }
+    }
+    // OCP: Método abierto a la extensión para manejar cambios en la navegación
+    private fun handleDestinationChange(destinationId: Int) {
+        // Configuración centralizada de títulos y autenticación por destino
+        val destinationConfig = mapOf(
+            R.id.loginFragment to Pair("Iniciar Sesión", false),
+            R.id.registerFragment to Pair("Registro", true),
+        )
+        val config = destinationConfig[destinationId]
 
-
+        supportActionBar?.title = config?.first ?: getString(R.string.app_name)
+        supportActionBar?.setDisplayHomeAsUpEnabled(config?.second == true)
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
