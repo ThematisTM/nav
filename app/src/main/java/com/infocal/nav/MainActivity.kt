@@ -1,6 +1,9 @@
 package com.infocal.nav
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -14,8 +17,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= MainActivityBinding.inflate(layoutInflater)
-//        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.toolbar)
         setupNavHost()
+        // Listener para cambios en la navegación
+        setupDestinationChangedListener()
         setContentView(binding.root)
     }
 
@@ -25,17 +30,50 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         setupActionBarWithNavController(navController)
     }
+    // SRP: Listener para cambios en la navegación
+    private fun setupDestinationChangedListener() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            handleDestinationChange(destination.id)
+            invalidateOptionsMenu() // <-- Esto fuerza a llamar onPrepareOptionsMenu
+        }
+    }
+    // OCP: Método abierto a la extensión para manejar cambios en la navegación
+    private fun handleDestinationChange(destinationId: Int) {
+        // Configuración centralizada de títulos y autenticación por destino
+        val destinationConfig = mapOf(
+            R.id.loginFragment to Pair("Iniciar Sesión", false),
+            R.id.registerFragment to Pair("Registro", true),
+        )
+        val config = destinationConfig[destinationId]
 
-    //configurar el actionbar
-//    private fun configurateActionBar(title: String,displayHomeAsUpEnabled: Boolean) {
-//        supportActionBar?.title = title
-//        supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
-//        supportActionBar?.setDisplayShowHomeEnabled(displayHomeAsUpEnabled)
-//
-//    }
+        supportActionBar?.title = config?.first ?: getString(R.string.app_name)
+        supportActionBar?.setDisplayHomeAsUpEnabled(config?.second == true)
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar, menu)
+        //todo add funtions search
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.actions_search->{
+                //todo actions button
+                true
+            }
+            R.id.actions_settings->{
+                //implementar toast toast
+                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }
