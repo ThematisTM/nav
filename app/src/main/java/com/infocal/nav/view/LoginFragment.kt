@@ -54,16 +54,7 @@ class LoginFragment : Fragment() {
         }
 
         binding.loginButton.setOnClickListener {
-            viewModel.login(
-                onSuccess = {
-                    //todo Navega o muestra éxito
-
-                },
-                onError = { message ->
-                    //todo Mostrar error al usuario y no al input text
-                    binding.passwordTextInputLayout.error = message
-                }
-            )
+            viewModel.login()
         }
 
         binding.registerButton.setOnClickListener {
@@ -78,7 +69,6 @@ class LoginFragment : Fragment() {
                     binding.usernameTextInputLayout.error = state.usernameError
                     binding.passwordTextInputLayout.error = state.passwordError
                     binding.loginButton.isEnabled = state.isFormValid && !state.isLoading
-
                     binding.loginButton.text =
                         if (state.isLoading) "Validando..." else "Iniciar sesión"
                 }

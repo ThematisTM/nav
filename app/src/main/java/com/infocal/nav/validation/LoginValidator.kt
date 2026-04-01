@@ -1,14 +1,17 @@
-package com.infocal.nav.model
+package com.infocal.nav.validation
+
+import android.util.Patterns
+import com.infocal.nav.model.ValidationResult
 
 class LoginValidator {
 
-    fun validateUsername(username: String): ValidationResult {
-        val value = username.trim()
+    fun validateEmail(email: String): ValidationResult {
+        val value = email.trim()
 
         return when {
-            value.isEmpty() -> ValidationResult(false, "El usuario es obligatorio")
-            value.length < 3 -> ValidationResult(false, "Debe tener al menos 3 caracteres")
-            value.length > 50 -> ValidationResult(false, "No puede superar 50 caracteres")
+            value.isEmpty() -> ValidationResult(false, "El correo es obligatorio")
+            !Patterns.EMAIL_ADDRESS.matcher(value).matches() ->
+                ValidationResult(false, "Formato de correo inválido")
             else -> ValidationResult(true)
         }
     }
