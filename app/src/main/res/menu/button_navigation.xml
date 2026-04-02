@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/productFragment"
+        android:icon="@drawable/precision_manufacturing_24"
+        android:title="product"
+        />
+    <item
+        android:id="@+id/welcomeFragment"
+        android:icon="@drawable/home_24"
+        android:title="home" />
+    <item
+        android:id="@+id/graphFragment"
+        android:icon="@drawable/graph_2_24"
+        android:title="graphics" />
+</menu>

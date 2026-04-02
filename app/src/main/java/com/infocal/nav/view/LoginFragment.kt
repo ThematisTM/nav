@@ -71,10 +71,23 @@ class LoginFragment : Fragment() {
                     binding.loginButton.isEnabled = state.isFormValid && !state.isLoading
                     binding.loginButton.text =
                         if (state.isLoading) "Validando..." else "Iniciar sesión"
+                    // validar si el login fue exitoso
+                    if (state.isLoginSuccess) {
+                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                        viewModel.clearLoginSuccess() // evita navegación múltiple
+                    }
+                    // (opcional) mostrar error
+                    state.loginErrorMessage?.let {
+                        // Toast o Snackbar
+                        binding.usernameTextInputLayout.error = it
+                        viewModel.clearLoginError() //  evita mensaje múltiple
+                    }
                 }
             }
         }
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
